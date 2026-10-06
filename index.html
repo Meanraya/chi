@@ -6,7 +6,7 @@
   <title>🌸 汉语生词卡片 & 游戏 · Cute Chinese Flashcards & Dialogue Game (3,000 Words)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&family=Noto+Sans:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
   <style>
     :root {
       /* Cute Pastel Palette */
@@ -1514,24 +1514,496 @@
       font-family: monospace;
       font-size: 0.74rem;
     }
+
+    /* ========================================================
+       ✨ ENHANCED VISUALS & MOTION LAYER
+       ======================================================== */
+    :root {
+      --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    html { overflow-x: hidden; }
+
+    body {
+      background: linear-gradient(-45deg, #FFF3EC, #FFFDF9, #FFEBF0, #FFF6E0);
+      background-size: 400% 400%;
+      background-attachment: fixed;
+      animation: bgShift 24s ease infinite;
+      overflow-x: hidden;
+    }
+
+    @keyframes bgShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Floating petals & lanterns in background */
+    .sky-deco {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .petal {
+      position: absolute;
+      top: -48px;
+      left: var(--x, 50%);
+      font-size: var(--s, 18px);
+      opacity: var(--o, 0.5);
+      animation: petalFall var(--d, 16s) linear infinite;
+      animation-delay: var(--dl, 0s);
+      will-change: transform;
+    }
+
+    @keyframes petalFall {
+      0% { transform: translate3d(0, -48px, 0) rotate(0deg); }
+      25% { transform: translate3d(36px, 25vh, 0) rotate(90deg); }
+      50% { transform: translate3d(-20px, 52vh, 0) rotate(190deg); }
+      75% { transform: translate3d(30px, 80vh, 0) rotate(280deg); }
+      100% { transform: translate3d(-10px, 110vh, 0) rotate(380deg); }
+    }
+
+    .nav-tabs-container,
+    .header,
+    .app-container {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header ornaments */
+    .chinese-ornament .lantern {
+      display: inline-block;
+      transform-origin: 50% 0;
+      animation: swing 2.8s ease-in-out infinite;
+    }
+    .chinese-ornament .lantern:last-child { animation-delay: -1.4s; }
+    .chinese-ornament .panda {
+      display: inline-block;
+      animation: bob 3s ease-in-out infinite;
+    }
+
+    @keyframes swing {
+      0%, 100% { transform: rotate(-9deg); }
+      50% { transform: rotate(9deg); }
+    }
+    @keyframes bob {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-4px) scale(1.06); }
+    }
+
+    .title .title-text {
+      background: linear-gradient(90deg, var(--deep-red), var(--primary-red), #FF9A3C, var(--primary-red), var(--deep-red));
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: shimmer 6s linear infinite;
+    }
+    .title .title-emoji {
+      display: inline-block;
+      animation: spinSoft 7s ease-in-out infinite;
+    }
+    .title.swap { animation: titleSwap 0.5s var(--ease-bounce); }
+
+    @keyframes shimmer {
+      to { background-position: 200% center; }
+    }
+    @keyframes spinSoft {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(20deg) scale(1.12); }
+    }
+    @keyframes titleSwap {
+      from { opacity: 0; transform: translateY(-8px) scale(0.96); }
+      to { opacity: 1; transform: none; }
+    }
+
+    /* Sliding nav indicator */
+    .nav-tabs-container { position: relative; }
+    .nav-indicator {
+      position: absolute;
+      top: 4px;
+      bottom: 4px;
+      left: 0;
+      width: 0;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--primary-red), #FF7F94);
+      box-shadow: 0 4px 14px rgba(255, 90, 118, 0.35);
+      transition: transform 0.5s var(--ease-bounce), width 0.5s var(--ease-bounce);
+      z-index: 0;
+      pointer-events: none;
+    }
+    .nav-tab-btn { position: relative; z-index: 1; }
+    .nav-tabs-container.has-indicator .nav-tab-btn.active {
+      background: transparent;
+      box-shadow: none;
+    }
+
+    /* View transitions */
+    .mode-view { animation: viewIn 0.5s var(--ease-out); }
+    @keyframes viewIn {
+      from { opacity: 0; transform: translateY(16px) scale(0.985); }
+      to { opacity: 1; transform: none; }
+    }
+
+    /* Stats */
+    .stat-item {
+      border-radius: 12px;
+      padding: 2px 0;
+      transition: transform 0.25s var(--ease-bounce), background 0.25s;
+    }
+    .stat-item:hover { transform: translateY(-3px); background: #FFF6F8; }
+    .bump { animation: bump 0.45s var(--ease-bounce); }
+    @keyframes bump {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.28); }
+      100% { transform: scale(1); }
+    }
+
+    .progress-bar-wrap { height: 8px; box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05); }
+    .progress-mastered,
+    .progress-learning {
+      background-image: linear-gradient(45deg, rgba(255,255,255,0.3) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.3) 75%, transparent 75%, transparent);
+      background-size: 14px 14px;
+      animation: stripes 1.2s linear infinite;
+      transition: width 0.8s var(--ease-out);
+    }
+    @keyframes stripes {
+      to { background-position: 14px 0; }
+    }
+
+    .filter-panel, .stats-bar, .game-stats-bar, .dialogue-theater {
+      transition: box-shadow 0.3s, transform 0.3s var(--ease-out);
+    }
+    .filter-panel:hover, .stats-bar:hover, .game-stats-bar:hover {
+      box-shadow: 0 8px 22px rgba(255, 120, 140, 0.12);
+    }
+
+    /* Flashcard: tilt + slide + shine */
+    .flashcard-wrapper {
+      transform: perspective(1000px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+      transition: transform 0.3s ease-out;
+    }
+    .flashcard-wrapper.slide-next { animation: slideNext 0.45s var(--ease-out); }
+    .flashcard-wrapper.slide-prev { animation: slidePrev 0.45s var(--ease-out); }
+    .flashcard-wrapper.shuffling { animation: shuffleDeck 0.7s var(--ease-out); }
+    .flashcard-wrapper.nudge { animation: nudge 0.45s ease; }
+    .flashcard-wrapper.celebrate { animation: celebrate 0.55s var(--ease-bounce); }
+
+    @keyframes slideNext {
+      from { translate: 70px 0; scale: 0.94; opacity: 0; }
+      to { translate: 0 0; scale: 1; opacity: 1; }
+    }
+    @keyframes slidePrev {
+      from { translate: -70px 0; scale: 0.94; opacity: 0; }
+      to { translate: 0 0; scale: 1; opacity: 1; }
+    }
+    @keyframes shuffleDeck {
+      0% { translate: 0 0; rotate: 0deg; }
+      20% { translate: -40px -6px; rotate: -7deg; }
+      40% { translate: 36px 4px; rotate: 6deg; }
+      60% { translate: -22px -2px; rotate: -3deg; }
+      80% { translate: 10px 0; rotate: 1deg; }
+      100% { translate: 0 0; rotate: 0deg; }
+    }
+    @keyframes nudge {
+      0%, 100% { translate: 0 0; }
+      20%, 60% { translate: -8px 0; }
+      40%, 80% { translate: 8px 0; }
+    }
+    @keyframes celebrate {
+      0% { scale: 1; }
+      40% { scale: 1.04; }
+      100% { scale: 1; }
+    }
+
+    .card-face.card-front {
+      background:
+        radial-gradient(circle at 100% 0%, #FFEFF3 0, transparent 38%),
+        radial-gradient(circle at 0% 100%, #FFF6E2 0, transparent 40%),
+        var(--card-front);
+    }
+    .card-face.card-back {
+      background:
+        radial-gradient(circle at 0% 0%, #FFF3E0 0, transparent 40%),
+        radial-gradient(circle at 100% 100%, #FFEDF1 0, transparent 40%),
+        var(--card-back);
+    }
+    .card-face {
+      box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 18px 40px rgba(255, 90, 118, 0.14), 0 4px 12px rgba(0, 0, 0, 0.04);
+    }
+    .card-face::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,0.65) 48%, transparent 62%);
+      background-size: 250% 100%;
+      background-position: 160% 0;
+    }
+    .flashcard:not(.flipped) .card-front::after,
+    .flashcard.flipped .card-back::after {
+      animation: shine 1.1s 0.2s ease-out;
+    }
+    @keyframes shine {
+      from { background-position: 160% 0; }
+      to { background-position: -60% 0; }
+    }
+
+    .chinese-character.pop-in { animation: hanziIn 0.55s var(--ease-bounce); }
+    @keyframes hanziIn {
+      from { opacity: 0; transform: scale(0.6) translateY(10px); filter: blur(4px); }
+      to { opacity: 1; transform: none; filter: none; }
+    }
+
+    .audio-btn { animation: breathe 2.6s ease-in-out infinite; }
+    @keyframes breathe {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255, 90, 118, 0.25); }
+      50% { box-shadow: 0 0 0 8px rgba(255, 90, 118, 0); }
+    }
+
+    /* Buttons: press + ripple */
+    .btn-mark, .btn-nav, .btn-flip-direct, .icon-btn, .pill-btn, .btn-next-question,
+    .btn-primary, .btn-secondary, .btn-modal-flip, .btn-modal-skip,
+    .btn-beautified-toggle, .btn-audio-toggle, .nav-tab-btn, .font-tool-btn {
+      position: relative;
+      overflow: hidden;
+    }
+    :is(.btn-mark, .btn-nav, .btn-flip-direct, .icon-btn, .pill-btn, .btn-next-question,
+        .btn-primary, .btn-secondary, .btn-modal-flip, .btn-modal-skip,
+        .btn-beautified-toggle, .btn-audio-toggle, .font-tool-btn):active:not(:disabled) {
+      transform: translateY(1px) scale(0.95);
+      transition-duration: 0.08s;
+    }
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.55);
+      transform: scale(0);
+      animation: ripple 0.6s ease-out forwards;
+      pointer-events: none;
+      mix-blend-mode: soft-light;
+    }
+    .choice-card .ripple, .pill-btn:not(.active) .ripple, .font-tool-btn:not(.active) .ripple,
+    .btn-nav .ripple, .icon-btn .ripple, .btn-secondary .ripple {
+      background: rgba(255, 90, 118, 0.22);
+      mix-blend-mode: normal;
+    }
+    @keyframes ripple {
+      to { transform: scale(2.6); opacity: 0; }
+    }
+
+    .btn-flip-direct, .btn-next-question:not(:disabled) {
+      background-size: 200% 100%;
+    }
+    .btn-next-question:not(:disabled) { animation: readyPulse 1.6s ease-in-out infinite; }
+    @keyframes readyPulse {
+      0%, 100% { box-shadow: 0 4px 12px rgba(255, 90, 118, 0.25); }
+      50% { box-shadow: 0 6px 22px rgba(255, 90, 118, 0.5); }
+    }
+
+    /* Particles (bursts / confetti / floating score) */
+    .fx-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 500;
+      overflow: hidden;
+    }
+    .fx-particle {
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-size: var(--fs, 18px);
+      will-change: transform, opacity;
+      animation: particleFly var(--dur, 900ms) var(--ease-out) forwards;
+    }
+    @keyframes particleFly {
+      0% { transform: translate(var(--sx), var(--sy)) scale(0.4) rotate(0deg); opacity: 1; }
+      70% { opacity: 1; }
+      100% { transform: translate(var(--ex), var(--ey)) scale(1) rotate(var(--rot, 180deg)); opacity: 0; }
+    }
+    .fx-confetti {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 8px;
+      height: 12px;
+      border-radius: 2px;
+      will-change: transform, opacity;
+      animation: confettiFall var(--dur, 1300ms) cubic-bezier(0.2, 0.6, 0.4, 1) forwards;
+    }
+    @keyframes confettiFall {
+      0% { transform: translate(var(--sx), var(--sy)) rotate(0deg); opacity: 1; }
+      100% { transform: translate(var(--ex), var(--ey)) rotate(var(--rot, 540deg)); opacity: 0; }
+    }
+    .fx-score {
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-weight: 600;
+      font-size: 1.3rem;
+      color: var(--jade-green);
+      text-shadow: 0 2px 6px rgba(44, 182, 125, 0.35);
+      animation: scoreFloat 1.1s var(--ease-out) forwards;
+      white-space: nowrap;
+    }
+    @keyframes scoreFloat {
+      0% { transform: translate(var(--sx), var(--sy)) scale(0.6); opacity: 0; }
+      20% { transform: translate(var(--sx), calc(var(--sy) - 14px)) scale(1.15); opacity: 1; }
+      100% { transform: translate(var(--sx), calc(var(--sy) - 70px)) scale(1); opacity: 0; }
+    }
+
+    /* Game: bubbles, choices, blanks */
+    .chat-bubble-row.enter { animation: bubbleIn 0.5s var(--ease-bounce) backwards; }
+    .chat-bubble-row.player-row.enter { animation-delay: 0.18s; }
+    @keyframes bubbleIn {
+      from { opacity: 0; transform: translateY(14px) scale(0.92); }
+      to { opacity: 1; transform: none; }
+    }
+    .avatar-icon { animation: bob 3.2s ease-in-out infinite; }
+    .avatar-icon.player-avatar { animation-delay: -1.6s; }
+
+    .choice-card {
+      animation: choiceIn 0.45s var(--ease-bounce) backwards;
+      animation-delay: calc(var(--i, 0) * 70ms + 260ms);
+    }
+    @keyframes choiceIn {
+      from { opacity: 0; transform: translateY(16px) scale(0.95); }
+      to { opacity: 1; transform: none; }
+    }
+    .choice-card.correct { animation: correctPop 0.5s var(--ease-bounce); }
+    @keyframes correctPop {
+      0% { transform: scale(1); }
+      45% { transform: scale(1.07); }
+      100% { transform: scale(1.02); }
+    }
+    .choice-card { overflow: hidden; }
+    .choice-card.disabled { cursor: default; }
+    .choice-card.disabled:not(.correct):not(.wrong) { opacity: 0.6; }
+
+    .game-blank-slot:not(.correct-filled) { animation: blankGlow 1.8s ease-in-out infinite; }
+    @keyframes blankGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255, 183, 3, 0.0); }
+      50% { box-shadow: 0 0 0 4px rgba(255, 183, 3, 0.25); }
+    }
+    .game-blank-slot.correct-filled { animation: fillPop 0.55s var(--ease-bounce); }
+    @keyframes fillPop {
+      0% { transform: scale(0.6); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .game-stat-val.flame { animation: flame 0.6s var(--ease-bounce); }
+    @keyframes flame {
+      0% { transform: scale(1); color: inherit; }
+      40% { transform: scale(1.4) rotate(-6deg); color: #FF7A00; }
+      100% { transform: scale(1); }
+    }
+    .game-stat-val { display: inline-block; }
+
+    .dialogue-translation-box.active { animation: dropDown 0.35s var(--ease-out); }
+    @keyframes dropDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: none; }
+    }
+    .choice-sub.visible { animation: dropDown 0.3s var(--ease-out); }
+
+    /* Modals: open / close */
+    .game-flashcard-modal-overlay.active,
+    .modal-overlay.active { animation: overlayIn 0.25s ease-out; }
+    .game-flashcard-modal-overlay.closing,
+    .modal-overlay.closing { animation: overlayOut 0.22s ease-in forwards; }
+    .modal-card { animation: modalPop 0.32s var(--ease-bounce); }
+    .closing .game-flashcard-modal-box,
+    .closing .modal-card { animation: modalOut 0.22s ease-in forwards; }
+
+    @keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes overlayOut { from { opacity: 1; } to { opacity: 0; } }
+    @keyframes modalPop {
+      from { opacity: 0; transform: scale(0.86) translateY(24px); }
+      to { opacity: 1; transform: none; }
+    }
+    @keyframes modalOut {
+      to { opacity: 0; transform: scale(0.92) translateY(12px); }
+    }
+
+    /* Pinyin tone marks (ǎ ǐ ǔ ǖ) render cleanly in Noto Sans */
+    .pinyin, .example-pinyin, .trans-py, .choice-pinyin, .game-blank-slot.correct-filled {
+      font-family: 'Noto Sans', 'Mitr', sans-serif;
+    }
+
+    .kbd { transition: transform 0.15s, background 0.15s; }
+    .kbd:hover { transform: translateY(-2px); }
+
+    /* Accessibility: keyboard focus ring */
+    button:focus-visible, select:focus-visible, .input-field:focus-visible {
+      outline: 3px solid rgba(255, 183, 3, 0.6);
+      outline-offset: 2px;
+    }
+
+    @media (hover: none) {
+      .flashcard-wrapper { transform: none; }
+    }
+
+    .nav-tab-btn { white-space: nowrap; }
+    .stat-badge { white-space: nowrap; }
+
+    @media (max-width: 520px) {
+      .tab-en { display: none; }
+      .nav-tab-btn { padding: 7px 14px; font-size: 0.85rem; }
+      .title { font-size: 1.5rem; flex-wrap: wrap; }
+      .stat-label { font-size: 0.66rem; }
+      .stat-badge { padding: 2px 6px; font-size: 0.8rem; }
+      .action-bar > div:first-child { flex-wrap: wrap; }
+      .icon-btn { text-align: left; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        animation-delay: 0ms !important;
+        transition-duration: 0.01ms !important;
+      }
+      .sky-deco, .fx-layer { display: none; }
+      body { animation: none; }
+    }
   </style>
 </head>
 <body>
 
+  <!-- Decorative floating petals (pure CSS animation) -->
+  <div class="sky-deco" aria-hidden="true">
+    <span class="petal" style="--x:6%;--d:17s;--dl:-2s;--s:18px">🌸</span>
+    <span class="petal" style="--x:18%;--d:21s;--dl:-11s;--s:14px;--o:.4">💮</span>
+    <span class="petal" style="--x:31%;--d:19s;--dl:-6s;--s:20px">🌸</span>
+    <span class="petal" style="--x:47%;--d:24s;--dl:-15s;--s:15px;--o:.35">✨</span>
+    <span class="petal" style="--x:62%;--d:18s;--dl:-9s;--s:17px">🌸</span>
+    <span class="petal" style="--x:76%;--d:22s;--dl:-3s;--s:22px;--o:.4">🏮</span>
+    <span class="petal" style="--x:88%;--d:20s;--dl:-13s;--s:16px">🌸</span>
+    <span class="petal" style="--x:95%;--d:26s;--dl:-19s;--s:13px;--o:.35">💮</span>
+  </div>
+  <div class="fx-layer" id="fx-layer" aria-hidden="true"></div>
+
   <!-- Top Mode Switcher Tabs -->
-  <nav class="nav-tabs-container">
+  <nav class="nav-tabs-container" id="nav-tabs">
+    <span class="nav-indicator" id="nav-indicator"></span>
     <button class="nav-tab-btn active" id="tab-flashcards" onclick="switchMode('flashcards')">
-      🎴 โหมดแฟลชการ์ด (Flashcards)
+      🎴 โหมดแฟลชการ์ด <span class="tab-en">(Flashcards)</span>
     </button>
     <button class="nav-tab-btn" id="tab-game" onclick="switchMode('game')">
-      🎮 โหมดเกมบทสนทนา (Dialogue Game)
+      🎮 โหมดเกมบทสนทนา <span class="tab-en">(Dialogue Game)</span>
     </button>
   </nav>
 
   <!-- Header -->
   <header class="header">
-    <div class="chinese-ornament">🏮 🐼 🏮</div>
-    <h1 class="title" id="page-title">汉语生词卡片 · Flashcards 🌸</h1>
+    <div class="chinese-ornament"><span class="lantern">🏮</span> <span class="panda">🐼</span> <span class="lantern">🏮</span></div>
+    <h1 class="title" id="page-title"><span class="title-text">汉语生词卡片 · Flashcards</span> <span class="title-emoji">🌸</span></h1>
     <p class="subtitle" id="page-subtitle">การ์ดคำศัพท์ภาษาจีน 3,000 คำ · มีคำอ่านไทย พินอิน สุ่ม พลิกการ์ดฝึกจำ</p>
   </header>
 
@@ -1595,7 +2067,7 @@
             🔀 สุ่มคำ (Shuffle)
           </button>
           <button class="icon-btn" id="btn-open-settings">
-            ⚙️ Google Sheet (<span id="source-status">คำศัพท์ในตัว 3,000 คำ</span>)
+            <span>⚙️ Google Sheet (<span id="source-status">คำศัพท์ในตัว 3,000 คำ</span>)</span>
           </button>
         </div>
 
@@ -1725,7 +2197,7 @@
       <div class="game-controls-bar">
         <div style="display: flex; align-items: center; gap: 6px; flex: 1; min-width: 220px;">
           <span style="font-size: 0.8rem; font-weight: 500; color: var(--deep-red);">หมวดหมู่เกม:</span>
-          <select id="game-category-select" onchange="onGameCategoryChange()">
+          <select id="game-category-select" onchange="onGameCategoryChange(); this.blur()">
             <option value="ALL">🌟 ทุกหมวดหมู่แบบสุ่ม (3,000 คำ)</option>
           </select>
         </div>
@@ -1882,7 +2354,7 @@
   </div>
 
   <!-- Google Sheets Settings Modal -->
-  <div class="modal-overlay" id="settings-modal">
+  <div class="modal-overlay" id="settings-modal" onclick="if (event.target === this) closeSettings()">
     <div class="modal-card">
       <div class="modal-header">
         <h3 class="modal-title">🏮 เชื่อมต่อ Google Sheets</h3>
@@ -1932,6 +2404,209 @@
     let gameCorrectCount = 0;
     let isSentenceSpeaking = false;
     let isDialogueTranslationOpen = false; // Closed by default!
+    let gameLocked = false; // Blocks extra picks while a wrong-answer reveal is pending
+    let lastRenderedHanzi = null;
+    let exampleRequestSeq = 0;
+    const exampleRequestTokens = {};
+    const prefersReducedMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+    /* ========================================================
+       0. UI HELPERS (escaping, animation, particles)
+       ======================================================== */
+    function escapeHtml(str) {
+      return String(str == null ? '' : str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function escapeRegExp(str) {
+      return String(str).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function wordCountText() {
+      return allWords.length.toLocaleString();
+    }
+
+    // Restart a one-shot CSS animation class on an element
+    function replayClass(el, cls, others = []) {
+      if (!el) return;
+      others.forEach(c => el.classList.remove(c));
+      el.classList.remove(cls);
+      void el.offsetWidth;
+      el.classList.add(cls);
+      const done = (e) => {
+        if (e.target !== el) return;
+        el.classList.remove(cls);
+        el.removeEventListener('animationend', done);
+      };
+      el.addEventListener('animationend', done);
+    }
+
+    function getFlashcardWrapper() {
+      return document.querySelector('#view-flashcards .flashcard-wrapper');
+    }
+
+    function centerOf(el) {
+      const r = el.getBoundingClientRect();
+      return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+    }
+
+    function spawnFx(node, lifeMs) {
+      const layer = document.getElementById('fx-layer');
+      if (!layer) return;
+      layer.appendChild(node);
+      setTimeout(() => node.remove(), lifeMs + 120);
+    }
+
+    function burstEmoji(originEl, emojis = ['🌸', '✨', '⭐', '💮'], count = 12) {
+      if (prefersReducedMotion || !originEl) return;
+      const { x, y } = centerOf(originEl);
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('span');
+        p.className = 'fx-particle';
+        p.textContent = emojis[i % emojis.length];
+        const angle = (Math.PI * 2 * i) / count + Math.random() * 0.5;
+        const dist = 60 + Math.random() * 80;
+        const dur = 700 + Math.random() * 500;
+        p.style.setProperty('--sx', `${x - 10}px`);
+        p.style.setProperty('--sy', `${y - 10}px`);
+        p.style.setProperty('--ex', `${x - 10 + Math.cos(angle) * dist}px`);
+        p.style.setProperty('--ey', `${y - 10 + Math.sin(angle) * dist}px`);
+        p.style.setProperty('--rot', `${(Math.random() - 0.5) * 540}deg`);
+        p.style.setProperty('--fs', `${14 + Math.random() * 12}px`);
+        p.style.setProperty('--dur', `${dur}ms`);
+        spawnFx(p, dur);
+      }
+    }
+
+    function confettiBurst(originEl, count = 36) {
+      if (prefersReducedMotion || !originEl) return;
+      const colors = ['#FF5A76', '#FFB703', '#2CB67D', '#FF9A3C', '#8EC5FF', '#FFC2D1'];
+      const { x, y } = centerOf(originEl);
+      for (let i = 0; i < count; i++) {
+        const c = document.createElement('span');
+        c.className = 'fx-confetti';
+        c.style.background = colors[i % colors.length];
+        const dur = 900 + Math.random() * 700;
+        c.style.setProperty('--sx', `${x}px`);
+        c.style.setProperty('--sy', `${y}px`);
+        c.style.setProperty('--ex', `${x + (Math.random() - 0.5) * 380}px`);
+        c.style.setProperty('--ey', `${y + (Math.random() * 280 - 120)}px`);
+        c.style.setProperty('--rot', `${(Math.random() - 0.5) * 1080}deg`);
+        c.style.setProperty('--dur', `${dur}ms`);
+        spawnFx(c, dur);
+      }
+    }
+
+    function floatScore(originEl, text) {
+      if (prefersReducedMotion || !originEl) return;
+      const { x, y } = centerOf(originEl);
+      const s = document.createElement('span');
+      s.className = 'fx-score';
+      s.textContent = text;
+      s.style.setProperty('--sx', `${x - 24}px`);
+      s.style.setProperty('--sy', `${y - 16}px`);
+      spawnFx(s, 1100);
+    }
+
+    // Count a number up/down smoothly
+    function animateNumber(el, to, format = v => v.toLocaleString(), duration = 600) {
+      if (!el) return;
+      const from = Number(el.dataset.value || 0);
+      el.dataset.value = String(to);
+      if (prefersReducedMotion || from === to) {
+        el.textContent = format(to);
+        return;
+      }
+      const start = performance.now();
+      const step = (now) => {
+        if (Number(el.dataset.value) !== to) return; // a newer animation took over
+        const t = Math.min(1, (now - start) / duration);
+        const eased = 1 - Math.pow(1 - t, 3);
+        el.textContent = format(Math.round(from + (to - from) * eased));
+        if (t < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+      // rAF pauses in background tabs; make sure the final value always lands
+      setTimeout(() => {
+        if (Number(el.dataset.value) === to) el.textContent = format(to);
+      }, duration + 50);
+    }
+
+    // Pop the element when its text changes
+    function setTextWithBump(el, text) {
+      if (!el) return;
+      if (el.textContent !== text) {
+        el.textContent = text;
+        replayClass(el, 'bump');
+      }
+    }
+
+    const RIPPLE_SELECTOR = '.btn-mark, .btn-nav, .btn-flip-direct, .icon-btn, .pill-btn, .btn-next-question, .btn-primary, .btn-secondary, .btn-modal-flip, .btn-modal-skip, .btn-beautified-toggle, .btn-audio-toggle, .nav-tab-btn, .font-tool-btn, .choice-card';
+
+    function attachRipple() {
+      document.addEventListener('pointerdown', (e) => {
+        if (prefersReducedMotion) return;
+        const target = e.target.closest(RIPPLE_SELECTOR);
+        if (!target || target.disabled || target.classList.contains('disabled')) return;
+        const r = target.getBoundingClientRect();
+        const size = Math.max(r.width, r.height);
+        const ink = document.createElement('span');
+        ink.className = 'ripple';
+        ink.style.width = ink.style.height = `${size}px`;
+        ink.style.left = `${e.clientX - r.left - size / 2}px`;
+        ink.style.top = `${e.clientY - r.top - size / 2}px`;
+        target.appendChild(ink);
+        setTimeout(() => ink.remove(), 650);
+      });
+    }
+
+    function attachCardTilt() {
+      const wrap = getFlashcardWrapper();
+      if (!wrap || prefersReducedMotion || !window.matchMedia('(hover: hover)').matches) return;
+      wrap.addEventListener('pointermove', (e) => {
+        const r = wrap.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        wrap.style.setProperty('--tilt-y', `${(px * 8).toFixed(2)}deg`);
+        wrap.style.setProperty('--tilt-x', `${(-py * 6).toFixed(2)}deg`);
+      });
+      wrap.addEventListener('pointerleave', () => {
+        wrap.style.setProperty('--tilt-x', '0deg');
+        wrap.style.setProperty('--tilt-y', '0deg');
+      });
+    }
+
+    function updateNavIndicator() {
+      const nav = document.getElementById('nav-tabs');
+      const ind = document.getElementById('nav-indicator');
+      const active = nav ? nav.querySelector('.nav-tab-btn.active') : null;
+      if (!nav || !ind || !active) return;
+      ind.style.width = `${active.offsetWidth}px`;
+      ind.style.transform = `translateX(${active.offsetLeft}px)`;
+      nav.classList.add('has-indicator');
+    }
+
+    // Modal overlays with open / close animations
+    function showOverlay(el) {
+      if (!el) return;
+      clearTimeout(el._closeTimer);
+      el.classList.remove('closing');
+      el.classList.add('active');
+    }
+
+    function hideOverlay(el) {
+      if (!el || !el.classList.contains('active') || el.classList.contains('closing')) return;
+      el.classList.add('closing');
+      el._closeTimer = setTimeout(() => el.classList.remove('active', 'closing'), prefersReducedMotion ? 0 : 220);
+    }
+
+    function isOverlayOpen(el) {
+      return !!el && el.classList.contains('active') && !el.classList.contains('closing');
+    }
 
     // Audio Synthesizer Context
     let audioCtx = null;
@@ -2202,6 +2877,13 @@
         initData();
       }
       setupEventListeners();
+      attachRipple();
+      attachCardTilt();
+      updateNavIndicator();
+      window.addEventListener('resize', updateNavIndicator);
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(updateNavIndicator);
+      }
     });
 
     function initData() {
@@ -2228,19 +2910,22 @@
         tabGame.classList.remove('active');
         viewFlashcards.classList.add('active');
         viewGame.classList.remove('active');
-        pageTitle.innerHTML = '汉语生词卡片 · Flashcards 🌸';
-        pageSubtitle.textContent = 'การ์ดคำศัพท์ภาษาจีน 3,000 คำ · มีคำอ่านไทย พินอิน สุ่ม พลิกการ์ดฝึกจำ';
+        pageTitle.innerHTML = '<span class="title-text">汉语生词卡片 · Flashcards</span> <span class="title-emoji">🌸</span>';
+        pageSubtitle.textContent = `การ์ดคำศัพท์ภาษาจีน ${wordCountText()} คำ · มีคำอ่านไทย พินอิน สุ่ม พลิกการ์ดฝึกจำ`;
       } else {
         tabGame.classList.add('active');
         tabFlashcards.classList.remove('active');
         viewGame.classList.add('active');
         viewFlashcards.classList.remove('active');
-        pageTitle.innerHTML = '汉语情景对话 · Dialogue Game 🎮';
-        pageSubtitle.textContent = 'มินิเกมบทสนทนา & เนื้อเรื่อง 3,000 คำ · แตะดูคำแปลและคำอ่านบทสนทนาและช้อยส์ได้';
-        if (!currentGameQuestion) {
+        pageTitle.innerHTML = '<span class="title-text">汉语情景对话 · Dialogue Game</span> <span class="title-emoji">🎮</span>';
+        pageSubtitle.textContent = `มินิเกมบทสนทนา & เนื้อเรื่อง ${wordCountText()} คำ · แตะดูคำแปลและคำอ่านบทสนทนาและช้อยส์ได้`;
+        // Also move on if a wrong pick's reveal was skipped by switching tabs (question would stay locked)
+        if (!currentGameQuestion || (gameLocked && !gameAnswered)) {
           nextGameQuestion();
         }
       }
+      replayClass(pageTitle, 'swap');
+      updateNavIndicator();
     }
 
     /* ========================================================
@@ -2250,7 +2935,7 @@
       const categories = Array.from(new Set(allWords.map(w => w.category))).filter(Boolean);
       
       categorySelect.innerHTML = '<option value="ALL">ทุกหมวดหมู่ (All Categories)</option>';
-      gameCategorySelect.innerHTML = '<option value="ALL">🌟 ทุกหมวดหมู่แบบสุ่ม (3,000 คำ)</option>';
+      gameCategorySelect.innerHTML = `<option value="ALL">🌟 ทุกหมวดหมู่แบบสุ่ม (${wordCountText()} คำ)</option>`;
 
       categories.forEach(cat => {
         const count = allWords.filter(w => w.category === cat).length;
@@ -2265,6 +2950,9 @@
         gameCategorySelect.appendChild(opt2);
       });
 
+      // Reset a filter that no longer exists (e.g. after loading a different Google Sheet)
+      if (selectedCategory !== 'ALL' && !categories.includes(selectedCategory)) selectedCategory = 'ALL';
+      if (gameCategory !== 'ALL' && !categories.includes(gameCategory)) gameCategory = 'ALL';
       categorySelect.value = selectedCategory;
       gameCategorySelect.value = gameCategory;
     }
@@ -2317,6 +3005,7 @@
 
         document.getElementById('btn-prev').disabled = true;
         document.getElementById('btn-next').disabled = true;
+        lastRenderedHanzi = null;
         return;
       }
 
@@ -2347,10 +3036,13 @@
         </div>`;
       }
 
-      const counterText = `${currentIndex + 1} / ${filteredWords.length}`;
+      const counterText = `${(currentIndex + 1).toLocaleString()} / ${filteredWords.length.toLocaleString()}`;
 
       // Front Face
-      document.getElementById('front-hanzi').textContent = item.hanzi;
+      const frontHanziEl = document.getElementById('front-hanzi');
+      frontHanziEl.textContent = item.hanzi;
+      if (item.hanzi !== lastRenderedHanzi) replayClass(frontHanziEl, 'pop-in');
+      lastRenderedHanzi = item.hanzi;
       document.getElementById('front-category').textContent = item.category || 'ทั่วไป';
       document.getElementById('front-counter').textContent = counterText;
       document.getElementById('front-status-container').innerHTML = badgeHtml;
@@ -2379,10 +3071,13 @@
       flashcard.classList.toggle('flipped');
     }
 
+    const SLIDE_CLASSES = ['slide-next', 'slide-prev', 'shuffling', 'nudge', 'celebrate'];
+
     function nextCard() {
       if (currentIndex < filteredWords.length - 1) {
         currentIndex++;
         renderCurrentCard();
+        replayClass(getFlashcardWrapper(), 'slide-next', SLIDE_CLASSES);
       }
     }
 
@@ -2390,6 +3085,7 @@
       if (currentIndex > 0) {
         currentIndex--;
         renderCurrentCard();
+        replayClass(getFlashcardWrapper(), 'slide-prev', SLIDE_CLASSES);
       }
     }
 
@@ -2401,6 +3097,12 @@
         delete memoryStatus[item.hanzi];
       } else {
         memoryStatus[item.hanzi] = isKnown;
+        if (isKnown) {
+          burstEmoji(document.getElementById('btn-mark-known'));
+          replayClass(getFlashcardWrapper(), 'celebrate', SLIDE_CLASSES);
+        } else {
+          replayClass(getFlashcardWrapper(), 'nudge', SLIDE_CLASSES);
+        }
       }
 
       localStorage.setItem('chinese_vocab_memory', JSON.stringify(memoryStatus));
@@ -2465,17 +3167,15 @@
         else unmarked++;
       });
 
-      document.getElementById('stat-total').textContent = `${total} คำ`;
-      document.getElementById('stat-mastered').textContent = `${mastered}`;
-      document.getElementById('stat-learning').textContent = `${learning}`;
-      document.getElementById('stat-unmarked').textContent = `${unmarked}`;
+      setTextWithBump(document.getElementById('stat-total'), `${total.toLocaleString()} คำ`);
+      setTextWithBump(document.getElementById('stat-mastered'), mastered.toLocaleString());
+      setTextWithBump(document.getElementById('stat-learning'), learning.toLocaleString());
+      setTextWithBump(document.getElementById('stat-unmarked'), unmarked.toLocaleString());
 
-      if (total > 0) {
-        const masteredPct = (mastered / total) * 100;
-        const learningPct = (learning / total) * 100;
-        document.getElementById('progress-mastered').style.width = `${masteredPct}%`;
-        document.getElementById('progress-learning').style.width = `${learningPct}%`;
-      }
+      const masteredPct = total > 0 ? (mastered / total) * 100 : 0;
+      const learningPct = total > 0 ? (learning / total) * 100 : 0;
+      document.getElementById('progress-mastered').style.width = `${masteredPct}%`;
+      document.getElementById('progress-learning').style.width = `${learningPct}%`;
     }
 
     function shuffleCards() {
@@ -2485,7 +3185,9 @@
         [filteredWords[i], filteredWords[j]] = [filteredWords[j], filteredWords[i]];
       }
       currentIndex = 0;
+      lastRenderedHanzi = null;
       renderCurrentCard();
+      replayClass(getFlashcardWrapper(), 'shuffling', SLIDE_CLASSES);
     }
 
     function playAudio(e) {
@@ -2692,6 +3394,10 @@
       }
       if (!hanziEl || !pinyinEl || !meaningEl) return;
 
+      // Only the latest request for this card slot may write its result
+      const token = ++exampleRequestSeq;
+      exampleRequestTokens[hanziElId] = token;
+
       if (!sentence) {
         hanziEl.textContent = 'ไม่มีตัวอย่างประโยค';
         pinyinEl.textContent = '';
@@ -2711,6 +3417,7 @@
 
       // 2. Fetch or compute full sentence Thai translation
       const result = await fetchFullSentenceTranslation(sentence, targetWord);
+      if (exampleRequestTokens[hanziElId] !== token) return; // user already moved to another card
       if (result) {
         if (result.py) pinyinEl.textContent = result.py;
         if (result.th) meaningEl.textContent = result.th;
@@ -2734,25 +3441,26 @@
     }
 
     function highlightWordInText(fullText, word) {
-      if (!fullText || !word) return fullText || '';
-      const re = new RegExp(`(${word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-      return fullText.replace(re, '<span class="trans-highlight">$1</span>');
+      if (!fullText || !word) return escapeHtml(fullText || '');
+      const re = new RegExp(`(${escapeRegExp(escapeHtml(word))})`, 'gi');
+      return escapeHtml(fullText).replace(re, '<span class="trans-highlight">$1</span>');
     }
 
     function highlightMeaningsInText(fullText, meanings, fallbackMeaning) {
-      if (!fullText) return fullText || '';
-      let res = fullText;
+      if (!fullText) return '';
+      let res = escapeHtml(fullText);
       let replaced = false;
       for (const m of meanings) {
-        if (m && res.includes(m)) {
-          const re = new RegExp(`(${m.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'g');
+        const safeM = escapeHtml(m);
+        if (safeM && res.includes(safeM)) {
+          const re = new RegExp(`(${escapeRegExp(safeM)})`, 'g');
           res = res.replace(re, '<span class="trans-highlight">$1</span>');
           replaced = true;
           break;
         }
       }
       if (!replaced && fallbackMeaning) {
-        res = `${fullText} <span class="trans-highlight">[${fallbackMeaning}]</span>`;
+        res = `${res} <span class="trans-highlight">[${escapeHtml(fallbackMeaning)}]</span>`;
       }
       return res;
     }
@@ -2926,9 +3634,10 @@
       modalFlashcard.classList.remove('flipped');
 
       titleEl.innerHTML = '💡 เฉลยคำศัพท์ที่ถูกต้อง';
+      const e = escapeHtml;
       wrongExplEl.innerHTML = `
-        <strong>❌ ยังไม่ถูกต้องนะ:</strong> คุณเลือกคำว่า <strong>“${chosenWord.hanzi}”</strong> (${chosenWord.pinyin} [${chosenWord.pinyin_th || ''}]) แปลว่า <em>“${chosenWord.meaning}”</em><br>
-        👉 <strong>คำตอบที่ถูกต้องคือ:</strong> <strong>“${q.target.hanzi}”</strong> (${q.target.pinyin} [${q.target.pinyin_th || ''}]) หมายถึง <em>“${q.target.meaning}”</em>
+        <strong>❌ ยังไม่ถูกต้องนะ:</strong> คุณเลือกคำว่า <strong>“${e(chosenWord.hanzi)}”</strong> (${e(chosenWord.pinyin)} [${e(chosenWord.pinyin_th || '')}]) แปลว่า <em>“${e(chosenWord.meaning)}”</em><br>
+        👉 <strong>คำตอบที่ถูกต้องคือ:</strong> <strong>“${e(q.target.hanzi)}”</strong> (${e(q.target.pinyin)} [${e(q.target.pinyin_th || '')}]) หมายถึง <em>“${e(q.target.meaning)}”</em>
       `;
 
       // Populate Modal Card Content
@@ -2951,11 +3660,11 @@
       document.getElementById('modal-back-meaning').textContent = q.target.meaning;
       updateCardExample('modal-back-example-hanzi', 'modal-back-example-pinyin', 'modal-back-example-meaning', q.target.example, q.target);
 
-      modal.classList.add('active');
+      showOverlay(modal);
     }
 
     function closeGameFlashcardModalAndSkip() {
-      document.getElementById('game-flashcard-modal').classList.remove('active');
+      hideOverlay(document.getElementById('game-flashcard-modal'));
       // Skip this question immediately to the next one!
       nextGameQuestion();
     }
@@ -2984,10 +3693,11 @@
       const transThEl = document.getElementById('trans-player-th');
 
       // 1. Immediately render precomputed Pinyin with blank! Never show placeholder!
+      const question = currentGameQuestion;
       const pinyinFull = getSentencePinyin(sentence, targetWord);
       let pinyinBlank = pinyinFull;
       if (targetWord.pinyin && pinyinBlank.toLowerCase().includes(targetWord.pinyin.toLowerCase())) {
-        const re = new RegExp(targetWord.pinyin, 'i');
+        const re = new RegExp(escapeRegExp(targetWord.pinyin), 'i');
         pinyinBlank = pinyinBlank.replace(re, '【 _____ 】');
       } else {
         pinyinBlank = `${pinyinFull} 【 _____ 】`;
@@ -3000,6 +3710,7 @@
 
       // 3. Fetch full high-quality translation
       const data = await fetchFullSentenceTranslation(sentence, targetWord);
+      if (currentGameQuestion !== question) return; // a newer question is on screen
       applySentenceTranslations(data, targetWord);
     }
 
@@ -3010,12 +3721,12 @@
       // Create blank versions for when question is not yet answered
       let pinyinBlank = pinyinFull;
       if (targetWord.pinyin && pinyinBlank.toLowerCase().includes(targetWord.pinyin.toLowerCase())) {
-        const re = new RegExp(targetWord.pinyin, 'i');
+        const re = new RegExp(escapeRegExp(targetWord.pinyin), 'i');
         pinyinBlank = pinyinBlank.replace(re, '【 _____ 】');
       }
 
       let thaiBlank = thaiFull;
-      const meanings = targetWord.meaning.split(/[\/,]/).map(s => s.trim()).filter(Boolean);
+      const meanings = String(targetWord.meaning || '').split(/[\/,]/).map(s => s.trim()).filter(Boolean);
       let replaced = false;
       for (const m of meanings) {
         if (m && thaiBlank.includes(m)) {
@@ -3049,9 +3760,11 @@
 
     function nextGameQuestion() {
       stopSentenceAudio();
+      if (allWords.length === 0) return;
       gameAnswered = false;
+      gameLocked = false;
       document.getElementById('btn-next-q').disabled = true;
-      document.getElementById('game-flashcard-modal').classList.remove('active');
+      hideOverlay(document.getElementById('game-flashcard-modal'));
 
       // Translation box starts CLOSED by default on new question
       isDialogueTranslationOpen = false;
@@ -3093,10 +3806,12 @@
       let sentenceBlank = '';
       const blankHtml = `<span class="game-blank-slot" id="game-blank-slot">【 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 】</span>`;
 
-      if (fullSentence.includes(targetWord.hanzi)) {
-        sentenceBlank = fullSentence.replace(targetWord.hanzi, blankHtml);
+      const safeSentence = escapeHtml(fullSentence);
+      const safeHanzi = escapeHtml(targetWord.hanzi);
+      if (safeHanzi && safeSentence.includes(safeHanzi)) {
+        sentenceBlank = safeSentence.replace(safeHanzi, blankHtml);
       } else {
-        sentenceBlank = `在这句话中：“${fullSentence}” 请填入：${blankHtml}`;
+        sentenceBlank = `在这句话中：“${safeSentence}” 请填入：${blankHtml}`;
       }
 
       currentGameQuestion = {
@@ -3129,6 +3844,9 @@
       document.getElementById('trans-partner-py').textContent = q.partnerObj.py;
       document.getElementById('trans-partner-th').textContent = q.partnerObj.th;
 
+      // Pop the chat bubbles in one after another
+      document.querySelectorAll('#view-game .chat-bubble-row').forEach(row => replayClass(row, 'enter'));
+
       // Load Player Sentence Translation & Pronunciation
       loadPlayerSentenceTranslation(q.fullSentence, q.target);
 
@@ -3147,6 +3865,7 @@
         card.className = 'choice-card';
         card.dataset.index = idx;
         card.dataset.hanzi = choice.hanzi;
+        card.style.setProperty('--i', idx);
         card.onclick = () => selectGameChoice(choice, card);
 
         const subClass = isDialogueTranslationOpen ? 'choice-sub visible' : 'choice-sub';
@@ -3156,13 +3875,13 @@
           <div class="choice-main-content">
             <div class="choice-key-badge">${keyLabels[idx]}</div>
             <div class="choice-text-col">
-              <div class="choice-hanzi">${choice.hanzi}</div>
+              <div class="choice-hanzi">${escapeHtml(choice.hanzi)}</div>
               <div class="${subClass}" id="choice-sub-${idx}">
                 <div class="choice-sub-pinyin-row">
-                  <span class="choice-pinyin">${choice.pinyin}</span>
-                  ${choice.pinyin_th ? `<span class="choice-th">[${choice.pinyin_th}]</span>` : ''}
+                  <span class="choice-pinyin">${escapeHtml(choice.pinyin)}</span>
+                  ${choice.pinyin_th ? `<span class="choice-th">[${escapeHtml(choice.pinyin_th)}]</span>` : ''}
                 </div>
-                <div class="choice-meaning">${choice.meaning}</div>
+                <div class="choice-meaning">${escapeHtml(choice.meaning)}</div>
               </div>
             </div>
           </div>
@@ -3175,12 +3894,14 @@
     }
 
     function selectGameChoice(choice, cardEl) {
-      if (gameAnswered) return;
+      if (gameAnswered || gameLocked) return;
       const q = currentGameQuestion;
       if (!q) return;
 
       const isCorrect = choice.hanzi === q.target.hanzi;
       gameTotalAnswered++;
+      gameLocked = true; // one pick per question
+      document.querySelectorAll('#game-choices-container .choice-card').forEach(c => c.classList.add('disabled'));
 
       if (isCorrect) {
         // Correct Answer!
@@ -3199,19 +3920,21 @@
 
         cardEl.classList.add('correct');
         playSweetChime(true);
+        confettiBurst(cardEl);
+        floatScore(document.getElementById('game-score'), `+${points}`);
 
         // Fill Blank with Jade Green Word
         const blankSlot = document.getElementById('game-blank-slot');
         if (blankSlot) {
           blankSlot.className = 'game-blank-slot correct-filled';
-          blankSlot.innerHTML = `✨ ${q.target.hanzi} (${q.target.pinyin})`;
+          blankSlot.innerHTML = `✨ ${escapeHtml(q.target.hanzi)} (${escapeHtml(q.target.pinyin)})`;
         }
 
         // Update Translation Box to Reveal Full Sentence Translation & Pinyin!
         if (q.fullPy) {
           const transPyEl = document.getElementById('trans-player-py');
           const transThEl = document.getElementById('trans-player-th');
-          const meanings = q.target.meaning.split(/[\/,]/).map(s => s.trim()).filter(Boolean);
+          const meanings = String(q.target.meaning || '').split(/[\/,]/).map(s => s.trim()).filter(Boolean);
           if (transPyEl) transPyEl.innerHTML = highlightWordInText(q.fullPy, q.target.pinyin);
           if (transThEl) transThEl.innerHTML = highlightMeaningsInText(q.fullTh, meanings, q.target.meaning);
         }
@@ -3232,14 +3955,20 @@
 
         // Automatically open the flashcard modal to reveal answer and explanation!
         setTimeout(() => {
-          openGameFlashcardModal(choice);
+          // Skip if the player already moved on (new question or switched mode)
+          if (currentGameQuestion === q && currentMode === 'game') {
+            openGameFlashcardModal(choice);
+          }
         }, 280);
       }
     }
 
     function updateGameStatsUI() {
-      document.getElementById('game-score').textContent = gameScore.toLocaleString();
-      document.getElementById('game-streak').textContent = `${gameStreak}x`;
+      animateNumber(document.getElementById('game-score'), gameScore);
+      const streakEl = document.getElementById('game-streak');
+      const prevStreak = parseInt(streakEl.textContent, 10) || 0;
+      streakEl.textContent = `${gameStreak}x`;
+      if (gameStreak > prevStreak) replayClass(streakEl, 'flame');
       const pct = gameTotalAnswered > 0 ? Math.round((gameCorrectCount / gameTotalAnswered) * 100) : 0;
       document.getElementById('game-accuracy').textContent = `${gameCorrectCount}/${gameTotalAnswered} (${pct}%)`;
     }
@@ -3302,12 +4031,21 @@
 
       const header = parseCSVLine(lines[0]).map(h => h.replace(/^["']|["']$/g, '').trim().toLowerCase());
       
-      const hanziIdx = header.findIndex(h => h.includes('hanzi') || h.includes('คำศัพท์') || h.includes('chinese') || h.includes('word'));
-      const pinyinIdx = header.findIndex(h => h.includes('pinyin') || h.includes('พินอิน'));
-      const pinyinThIdx = header.findIndex(h => h.includes('pinyin_th') || h.includes('คำอ่าน') || h.includes('thai'));
-      const meaningIdx = header.findIndex(h => h.includes('meaning') || h.includes('ความหมาย') || h.includes('แปล'));
-      const catIdx = header.findIndex(h => h.includes('cat') || h.includes('หมวด'));
-      const exIdx = header.findIndex(h => h.includes('example') || h.includes('ประโยค') || h.includes('sentence'));
+      // Try each matcher in order of precedence so e.g. "pinyin_th" never steals the "pinyin" column
+      const findCol = (...matchers) => {
+        for (const m of matchers) {
+          const i = header.findIndex(m);
+          if (i >= 0) return i;
+        }
+        return -1;
+      };
+      const hanziIdx = findCol(h => h === 'hanzi', h => h.includes('hanzi') || h.includes('คำศัพท์') || h.includes('chinese') || h.includes('word'));
+      const pinyinThIdx = findCol(h => h === 'pinyin_th', h => h.includes('pinyin_th') || h.includes('pinyin th') || h.includes('คำอ่าน'), h => h === 'thai');
+      const pinyinIdx = findCol(h => h === 'pinyin', (h, i) => i !== pinyinThIdx && (h.includes('pinyin') || h.includes('พินอิน')));
+      const meaningIdx = findCol(h => h === 'meaning', h => h.includes('meaning') || h.includes('ความหมาย') || h.includes('แปล'));
+      const catIdx = findCol(h => h === 'category', h => h.includes('cat') || h.includes('หมวด'));
+      const exPyIdx = findCol(h => h === 'example_py', h => h.includes('example_py') || h.includes('example pinyin'));
+      const exIdx = findCol(h => h === 'example', (h, i) => i !== exPyIdx && (h.includes('example') || h.includes('ประโยค') || h.includes('sentence')));
 
       const newWords = [];
 
@@ -3324,7 +4062,8 @@
           pinyin_th: cleanRow[pinyinThIdx >= 0 ? pinyinThIdx : 3] || '',
           meaning: cleanRow[meaningIdx >= 0 ? meaningIdx : 4] || '',
           category: cleanRow[catIdx >= 0 ? catIdx : 5] || 'ทั่วไป',
-          example: cleanRow[exIdx >= 0 ? exIdx : 6] || ''
+          example: cleanRow[exIdx >= 0 ? exIdx : 6] || '',
+          example_py: exPyIdx >= 0 ? (cleanRow[exPyIdx] || '') : ''
         });
       }
 
@@ -3354,7 +4093,7 @@
     }
 
     function closeSettings() {
-      document.getElementById('settings-modal').classList.remove('active');
+      hideOverlay(document.getElementById('settings-modal'));
     }
 
     function setupEventListeners() {
@@ -3370,21 +4109,45 @@
 
       categorySelect.addEventListener('change', (e) => {
         selectedCategory = e.target.value;
+        e.target.blur(); // hand keyboard shortcuts back to the cards
         applyFilters();
       });
 
       document.getElementById('btn-shuffle').addEventListener('click', shuffleCards);
 
       document.getElementById('btn-open-settings').addEventListener('click', () => {
-        document.getElementById('settings-modal').classList.add('active');
+        showOverlay(document.getElementById('settings-modal'));
+        setTimeout(() => sheetIdInput.focus(), 50);
       });
 
       // Keyboard Controls
       window.addEventListener('keydown', (e) => {
-        if (document.getElementById('settings-modal').classList.contains('active')) return;
+        if (e.ctrlKey || e.metaKey || e.altKey) return; // leave browser shortcuts (Cmd+S, Ctrl+R...) alone
+
+        const settingsModal = document.getElementById('settings-modal');
+        if (settingsModal.classList.contains('active')) {
+          if (e.key === 'Escape') closeSettings();
+          return;
+        }
+
+        // Don't hijack keys while typing or choosing from a dropdown
+        const tag = e.target && e.target.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (e.target && e.target.isContentEditable)) return;
+
+        // A focused button would also "click" on Space; drop focus so the shortcut runs exactly once
+        if (tag === 'BUTTON') {
+          const isEnter = e.code === 'Enter' || e.code === 'NumpadEnter' || e.key === 'Enter';
+          // Enter activates the focused button, except in the game where Enter means "next question"
+          if (isEnter && !(currentMode === 'game' && gameAnswered)) return;
+          if (e.code === 'Space' || isEnter) {
+            e.preventDefault();
+            e.target.blur();
+          }
+        }
 
         const gameModal = document.getElementById('game-flashcard-modal');
-        const isGameModalOpen = gameModal.classList.contains('active');
+        if (gameModal.classList.contains('closing')) return;
+        const isGameModalOpen = isOverlayOpen(gameModal);
 
         if (isGameModalOpen) {
           if (e.key === 'Escape') {
@@ -3424,9 +4187,9 @@
             }
           } else if (e.key === 't' || e.key === 'T') {
             toggleDialogueTranslation();
-          } else if (e.code === 'Space' || e.code === 'Enter') {
+          } else if (e.code === 'Space' || e.code === 'Enter' || e.code === 'NumpadEnter') {
+            e.preventDefault();
             if (gameAnswered) {
-              e.preventDefault();
               nextGameQuestion();
             }
           } else if (e.key === 'p' || e.key === 'P') {
